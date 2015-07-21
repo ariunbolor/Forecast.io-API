@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Forecast.IO API test</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://erikflowers.github.io/weather-icons/css/styles.css">
+</head>
+<style>
+.weather-panel .temp {
+    font-size: 5.9vw;
+    margin: 0px;
+    line-height: 60px;
+}
+.weather-panel .supersmall {
+    font-size: 9px;
+    margin-top: 0px;
+    }
+.wi {
+    font-size: 5.9vw;
+    }
+.weather-panel .col-sm-6 {
+    text-align: center;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>
+ 
+    	$(document).ready(function(){
+			var apiKey = 'b04dbf475994a98f5849aa6856a4596d';
+            var curl = 'https://api.forecast.io/forecast/';
+            var lati = 40.7146;
+            var longi = -74.0071;
+            var data;
+			$.ajax({
+			    type: "GET",
+			    url: curl + apiKey +"/"+ lati +","+ longi +"?callback=?",
+			    dataType: "json",
+			    success: function(data){
+					//var json = $.parseJSON(data);
+					console.log(data);
+					$("#currentTemperature").append(Math.floor(data.currently.apparentTemperature));
+                    $("#currentTime").append(Date(data.currently.time));
+                        if(data.currently.icon == 'clear-day') { $("#currentIcon").addClass("wi-day-sunny") };
+                        if(data.currently.icon == 'clear-night') { $("#currentIcon").addClass("wi-night-clear") };
+                        if(data.currently.icon == 'rain') { $("#currentIcon").addClass("wi-rain") };
+                        if(data.currently.icon == 'snow') { $("#currentIcon").addClass("wi-snow") };
+                        if(data.currently.icon == 'sleet') { $("#currentIcon").addClass("wi-day-sleet") };
+                        if(data.currently.icon == 'wind') { $("#currentIcon").addClass("wi-day-windy") };
+                        if(data.currently.icon == 'fog') { $("#currentIcon").addClass("wi-fog") };
+                        if(data.currently.icon == 'cloudy') { $("#currentIcon").addClass("wi-cloudy") };
+                        if(data.currently.icon == 'partly-cloudy-day') { $("#currentIcon").addClass("wi-day-cloudy") };
+                        if(data.currently.icon == 'partly-cloudy-night') { $("#currentIcon").addClass("wi-night-cloudy") };
+                        if(data.currently.icon == 'hail') { $("#currentIcon").addClass("wi-hail") };
+                        if(data.currently.icon == 'thunderstorm') { $("#currentIcon").addClass("wi-thunderstorm") };
+                        if(data.currently.icon == 'tornado') { $("#currentIcon").addClass("wi-meteor") };
+					$("#humidity").append(data.currently.humidity);
+					$("#currentWind").append(data.currently.windSpeed);
+                    $("#hourlySummary").append(data.hourly.summary);
+					$("#currentSummary").append(data.currently.summary);
+					$("#daily_summary").append(data.daily.summary);
+					$("weekly").append(data.daily.data[0].apparentTemperatureMax);
+			  	},
+			  	error: function() {
+			    	alert("An error occurred");
+			  	}
+			});
+		});
+</script>
+<body>
+<div class="container">
+    <div class="row"><h1>Forecast.io JQuery example</h1></div>
+	<div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-default weather-panel">
+                <div class="panel-heading">Current weather<br><small id="currentTime" class="supersmall"></small></div>
+                <div class="row">
+                    <div class="col-sm-6 wi" id="currentIcon"></div>
+                    <div class="col-sm-6" style="padding: 0px;">
+                        <h1 class="temp"><span id="currentTemperature"></span><span>°</span></h1>
+                        <small id="currentSummary"></small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12"><span></span><br>
+                        <span>wind: </span><span id="currentWind"></span><span> mph(s)</span><br>
+                        <span id="hourlySummary"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+	    <div class="col-md-3"></div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3"></div>
+	</div>
+</div>
+</body>
+</html>
